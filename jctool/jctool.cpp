@@ -2967,6 +2967,7 @@ int device_connection(){
             handle_ok = 2;
             return handle_ok;
         }
+        Sleep(1); //For some reason, adding a bit of delay here makes the handle call below work properly, which allows pro controller to connect.
         // Pro Controller
         if (handle = hid_open(0x57e, 0x2009, nullptr)) {
             handle_ok = 3;
@@ -2991,7 +2992,7 @@ int device_connection(){
                         L"CTCaer's Joy-Con Toolkit - Third-Party Device Detected",
                         MessageBoxButtons::YesNo, MessageBoxIcon::Warning) == System::Windows::Forms::DialogResult::Yes)
                     {
-                        if (handle = hid_open(cur_dev->product_id, cur_dev->vendor_id, cur_dev->serial_number)) {
+                        if (handle = hid_open(cur_dev->vendor_id, cur_dev->product_id, cur_dev->serial_number)) { //product & vendor parameters were switched, function call would always fail
                             // Maybe do some more tests here just to double check
                             hid_free_enumeration(devs);
                             handle_ok = 3;
